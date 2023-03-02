@@ -15,13 +15,15 @@ app.get("/", function(req, res) {
 app.post("/", function(req, res) {
     
     // takes in the city from the html form, display in // console. Takes in as string, ex. for kahului
-        var incity = String(req.body.cityInput);
-        console.log(req.body.cityInput);
+       var inlan = String(req.body.latInput);
+        console.log(req.body.latInput);
+        var inlon = String(req.body.lonInput);
+        console.log(req.body.lonInput);
     
     //build up the URL for the JSON query, API Key is // secret and needs to be obtained by signup 
         const units = "imperial";
         const apiKey = "b6304e5650dc46d1c2e0c54806e5ac4f";
-        const url = "https://api.openweathermap.org/data/2.5/weather?q=" + incity+"&units=" + units + "&APPID=" + apiKey;
+        const url = "https://api.openweathermap.org/data/2.5/weather?lat=" + inlan+"&lon="+inlon+"&units=" + units + "&APPID=" + apiKey;
     
     // this gets the data from Open WeatherPI
     https.get(url, function(response){
@@ -37,6 +39,7 @@ app.post("/", function(req, res) {
             const imageURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
             const humidity = weatherData.main.humidity;
             const windspeed = weatherData.wind.speed;
+            const cloudiness = weatherData.clouds.all;
             
             // displays the output of the results
             res.write("<h1> The weather is " + weatherDescription + "<h1>");
@@ -44,6 +47,7 @@ app.post("/", function(req, res) {
             res.write("<img src=" + imageURL +">");
             res.write("<h2> The humidity in " + city + " is "+ humidity + "% .<h2>");
             res.write("<h2> The wind speed in " + city + " is "+ windspeed + " mph(miles per hour). ");
+            res.write("<h2> The cloudiness in " + city + " is " + cloudiness +"% .</h2>")
             res.send();
         });
     });
